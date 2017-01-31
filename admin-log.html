@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+  $(document).ready(function(e) {
+    $('.message a').click(function(){
+     $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+  });
+
+  </script>
+  <link rel="stylesheet" href="admin-log-css.css">
+</head>
+
+<body>
+
+<div class="login-page">
+  <div class="form">
+    <form class="register-form">
+      <input type="text" placeholder="club name"/>
+      <input type="text" placeholder="userID"/>
+      <input type="password" placeholder="password"/>
+      <input type="text" placeholder="email address"/>
+      <input type="text" placeholder="phone no."/>
+      <button>Send Request</button>
+      <p class="message">Already registered? <a href="#">Sign In</a></p>
+    </form>
+    <form class="login-form" action="login_check.php" method="post">
+    <img src="login-headdinge.jpg" alt="logo not found" width="280"><br><br>
+
+      <input type="text" placeholder="username" name="username"/>
+      <input type="password" placeholder="password" name="password"/>
+      <button>login</button>
+      <p class="message">Not registered? <a href="#">Reguest an account</a></p>
+    </form>
+  </div>
+</div>
+</body>
+</html>
