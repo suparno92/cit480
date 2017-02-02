@@ -2,26 +2,27 @@
 
   include('mysql_connection.php');
 
-    // trims any blank spaces and get the username and password
-   $username = trim($_POST['username']);
+   #trims any blank spaces and get the username and password
+   $username = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['username']);
    $password = trim($_POST['password']);
 
-  // Checks if the form value is null or empty
+    #checks if the form value is null or empty
     if($username == '' || $password == ''){
 
-      mysqli_close($conn);
+      $conn = null;
       die("Error. One of the field is empty.");
 
     } else{
-
-    $query = "SELECT password,student_id FROM student WHERE username='$username'";
-    $response = mysqli_query($conn,$query);
+      $query = $conn->prepare('SELECT password,student_id FROM student WHERE username = :value');
+      $query->bindParam(':value', $username, PDO::PARAM_STR);
+      $query->execute();
+      $query->setFetchMode(PDO::FETCH_ASSOC);
 
 
     //check if username exists.
-    if(mysqli_num_rows($response) == 1){
+    if($query->rowCount() == 1){
 
-      $row = mysqli_fetch_assoc($response);
+      $row = $query->fetch(PDO::FETCH_ASSOC);
 
       $getpass= $row['password'];
       $getstudentid = $row['student_id'];

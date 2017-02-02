@@ -1,8 +1,47 @@
 <!doctype html>
  <html>
  <head>
- <meta charset="utf-8">
- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.3.0/snap.svg-min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+
+   <script type="text/javascript">
+
+
+        function delete_click(obj){
+
+          var id = obj.id;
+          //  alert("the id sis " + obj.id);
+          var txt;
+          var formData = {delete_id : id};
+          var user_response = window.confirm("Are you sure you want to remove this? " + id );
+
+          if (user_response == true) {
+
+          /* returns a Window.alert box after adding to database*/
+            $.ajax({
+                 type: "post",
+                 url: "club_admin_page.php",
+                 data: formData,
+                 success: function (response) {
+                    if(!response.error) location.reload(true);
+                 },
+                 error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                 }
+
+               });
+           }
+        }
+
+
+  </script>
+
 
 <?php
    include('mysql_connection.php');
@@ -12,25 +51,20 @@
    if(isset($_SESSION['username']))
    {
        echo ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-              <link rel="stylesheet" href="club_admin_page.css">';
+              <link rel="stylesheet" href="css/club_admin_page.css">';
        echo"<title>"; echo $_SESSION['username']; echo"</title>";
 
 
-  		   if(isset($_GET['delete_id']) && is_numeric($_GET['delete_id']))
+  		   if(isset($_POST['delete_id']))
     		 {
 
-    			$delete_id = trim($_GET['delete_id']);
-          $club_id = trim($_SESSION['club_id']);
-    		  $sqlq="DELETE FROM club_meetings WHERE meeting_id='$delete_id' and club_id='$club_id'";
+    			$delete_id = preg_replace("/[^0-9]/", "", $_POST['delete_id']);
+          $club_id = preg_replace("/[^0-9]/", "", $_SESSION['club_id']);
 
-
-
-            if(mysqli_query($conn,$sqlq)){
-
-
-            	header("Refresh:0; url=club_admin_page.php");
-
-    				}
+    		  $deletequery=$conn->prepare("DELETE FROM club_meetings WHERE meeting_id= :value1 and club_id= :value2");
+          $deletequery->bindParam(':value1',  $delete_id, PDO::PARAM_INT);
+          $deletequery->bindParam(':value2', $club_id, PDO::PARAM_INT);
+          $deletequery->execute();
 
     		 }
 
@@ -39,8 +73,8 @@
   		echo '
 
   			<title>Login</title>
+        </head>
 
-      		</head>
 
       			<!-- Main HTML -->
             <header id="topnav">
@@ -56,6 +90,7 @@
             </header>
 
       		<body>
+
           <meta charset="UTF-8">
 
       			<!-- Begin Page Content -->
@@ -76,52 +111,50 @@
               </tr>';
 
 
-            $tempid = trim($_SESSION['club_id']);
+						$listquery = $conn->prepare("SELECT meeting_id,date,time,room_no,description FROM club_meetings WHERE club_id= :value1");
+            $listquery->bindParam(':value1', $_SESSION['club_id'], PDO::PARAM_INT);
+            $listquery->execute();
+            $listquery->setFetchMode(PDO::FETCH_ASSOC);
 
-						$query2 = "SELECT meeting_id,date,time,room_no,description FROM club_meetings WHERE club_id='$tempid'";
-						if ($result=mysqli_query($conn,$query2))
-							 {
-							 // Fetch one and one row
-							 while ($row=mysqli_fetch_row($result))
+							 #Fetch one row of data at a time
+							 while ($row = $listquery->fetch(PDO::FETCH_ASSOC))
 								 {
 									 echo '<tr>';
 
                    echo '<td>';
-									 echo $row[1];
+									 echo $row['date'];
 
 									 echo '</td>';
 
 									 echo '<td>';
 
-									 echo $row[2];
+									 echo $row['time'];
 
 									 echo '</td>';
 
 									 echo '<td>';
 
-									 echo $row[3];
+									 echo $row['room_no'];
 
 									 echo '</td>';
 
 									 echo '<td>';
 
-									 echo $row[4];
+									 echo $row['description'];
 
 									 echo '</td>';
                    echo '<td>';
-                    echo '<a href="club_admin_page.php?edit_id='; echo $row[0]; echo'"><center><li class="glyphicon glyphicon-pencil" id="icon" ></li></center>';
+                    echo '<div class="w3-container" id="'; echo $row['meeting_id']; echo '"><p><button onclick="edit_click(this)" class="w3-btn">edit</button></p></div>';
 
-                    echo '</td>';
-                    echo '<td><a href="club_admin_page.php?delete_id='; echo $row[0]; echo'"><center><li class="glyphicon glyphicon-trash" id="icon" ></li></center></a></td>';
+                    echo '</td><td>';
+                    echo '<div class="w3-container"><p><button onclick="delete_click(this)" id="'; echo $row['meeting_id']; echo'" class="w3-btn">remove</button></p></div>';
 
-									 echo '</tr>';
+									 echo '</td></tr>';
 
 								 }
                        echo '</table>';
                        echo '</div>';
-							 // Free result set
-							 mysqli_free_result($result);
-							}
+
 
           if(isset($_GET['edit_id']) && is_numeric($_GET['edit_id']))
            {

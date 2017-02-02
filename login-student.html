@@ -1,66 +1,42 @@
+
 <!DOCTYPE html>
 <html>
-
 <head>
 
-  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+  $(document).ready(function(e) {
+    $('.message a').click(function(){
+     $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+  });
 
-  <title>CodePen - Login</title>
-
-    <link rel="stylesheet" href="css/login-page.css" media="screen" type="text/css" />
-
+  </script>
+  <link rel="stylesheet" href="css/admin-log-css.css">
 </head>
 
 <body>
 
-  <html lang="en-US">
-  <head>
+<div class="login-page">
+  <div class="form">
+    <form class="register-form">
+      <input type="text" placeholder="club name"/>
+      <input type="text" placeholder="userID"/>
+      <input type="password" placeholder="password"/>
+      <input type="text" placeholder="email address"/>
+      <input type="text" placeholder="phone no."/>
+      <button>Send Request</button>
+      <p class="message">Already registered? <a href="#">Sign In</a></p>
+    </form>
+    <form class="login-form" action="login_check_student.php" method="post">
+    <img src="" alt="logo not found" width="280"><br><br>
 
-    <meta charset="utf-8">
-
-    <title>Login</title>
-
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">
-
-    <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
- <![endif]-->
-
-  </head>
-
-  <body>
-    <div id="new">
-      <h1>CSUN STUDENT LOGIN</h1>
-
-    </div>
-
-
-    <div class="container">
-
-
-      <div id="login">
-
-        <form action="login_check_student.php" method="post">
-
-          <fieldset class="clearfix">
-
-            <p><span class="fontawesome-user"></span><input type="text" value="Username" name="username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Username" -->
-            <p><span class="fontawesome-lock"></span><input type="password"  value="Password" name="password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Password" -->
-            <p><input type="submit" name="submit" value="Sign In"></p>
-
-          </fieldset>
-
-        </form>
-
-        <p>Not a member? <a href="#">Sign up now</a><span class="fontawesome-arrow-right"></span></p>
-
-      </div> <!-- end login -->
-
-    </div>
-
-  </body>
-</html>
-
+      <input type="text" placeholder="username" name="username"/>
+      <input type="password" placeholder="password" name="password"/>
+      <button>login</button>
+      <p class="message">Not registered? <a href="#">Reguest an account</a></p>
+    </form>
+  </div>
+</div>
 </body>
-
 </html>

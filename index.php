@@ -41,8 +41,8 @@
 
       /* top bar fixed */
            #map-top {  height: 120px; width: 100%; position: fixed; top: 0px; left: 0px; background-color: white; z-index: 1;  box-shadow: 0 8px 6px -6px #999;}
-           #map-top-inside { height: 100%; width: 30%; background-image: url("toplogo2.jpg"); background-repeat:no-repeat; float:left; z-index: 1;}
-           #map-top-inside-middle { height: 100%; width: 40%; background-image: url("toplogo.jpg"); background-repeat:no-repeat; float:left; z-index: 1;}
+           #map-top-inside { height: 100%; width: 30%; background-image: url("images/toplogo2.jpg"); background-repeat:no-repeat; float:left; z-index: 1;}
+           #map-top-inside-middle { height: 100%; width: 40%; background-image: url("images/toplogo.jpg"); background-repeat:no-repeat; float:left; z-index: 1;}
            #map-top-inside-right { height: 100%; width: 20%;float:right; z-index: 1;}
 
 
@@ -340,7 +340,11 @@
       <div id="map-top-inside-middle">
       </div>
       <div id="map-top-inside-right">
-        <?php if(isset($_SESSION['username'])){ echo'<br><h1><a href="logout.php">Logout</a></h1>'; }else{echo'<div class="dropdown"><button class="dropbtn">Login</button><div class="dropdown-content"><a href="login-student.html">Student</a><a href="admin-log.html">Admin</a></div></div>';}?>
+        <?php if(isset($_SESSION['username'])){
+          echo'<br><h1><a href="logout.php">Logout</a></h1>';
+        }else{
+          echo'<div class="dropdown"><button class="dropbtn">Login</button><div class="dropdown-content"><a href="login-student.html">Student</a><a href="admin-log.html">Admin</a></div></div>';
+        }?>
       </div>
 
     </div>
@@ -351,9 +355,6 @@
         <div id="nav">
 
           <nav>
-
-
-
             <button class="accordion">Engineering & Computer Science</button>
               <div class="panel">
                 <table>
@@ -372,7 +373,7 @@
 
                 </table>
               </div>
-
+``
             <button class="accordion">Arts Media & Communication</button>
               <div class="panel">
                 <table>
