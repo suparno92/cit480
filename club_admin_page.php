@@ -55,28 +55,24 @@
        echo"<title>"; echo $_SESSION['username']; echo"</title>";
 
 
-  		   if(isset($_POST['delete_id']))
-    		 {
+   	if(isset($_POST['delete_id']))
+         {
 
-    			$delete_id = preg_replace("/[^0-9]/", "", $_POST['delete_id']);
+          $delete_id = preg_replace("/[^0-9]/", "", $_POST['delete_id']);
           $club_id = preg_replace("/[^0-9]/", "", $_SESSION['club_id']);
 
-    		  $deletequery=$conn->prepare("DELETE FROM club_meetings WHERE meeting_id= :value1 and club_id= :value2");
+          $deletequery=$conn->prepare("DELETE FROM club_meetings WHERE meeting_id= :value1 and club_id= :value2");
           $deletequery->bindParam(':value1',  $delete_id, PDO::PARAM_INT);
           $deletequery->bindParam(':value2', $club_id, PDO::PARAM_INT);
           $deletequery->execute();
 
-    		 }
+         }
 
+       echo '
 
-
-  		echo '
-
-  			<title>Login</title>
+  	<title>Login</title>
         </head>
-
-
-      			<!-- Main HTML -->
+      	<!-- Main HTML -->
             <header id="topnav">
                <div id="topnav-inside">
                  <div id="topnav-left">
@@ -93,7 +89,7 @@
 
           <meta charset="UTF-8">
 
-      			<!-- Begin Page Content -->
+      			
             <div id="container-body">
 
       			<div id="container">
@@ -111,51 +107,50 @@
               </tr>';
 
 
-						$listquery = $conn->prepare("SELECT meeting_id,date,time,room_no,description FROM club_meetings WHERE club_id= :value1");
+	    $listquery = $conn->prepare("SELECT meeting_id,date,time,room_no,description FROM club_meetings WHERE club_id= :value1");
             $listquery->bindParam(':value1', $_SESSION['club_id'], PDO::PARAM_INT);
             $listquery->execute();
             $listquery->setFetchMode(PDO::FETCH_ASSOC);
 
 							 #Fetch one row of data at a time
-							 while ($row = $listquery->fetch(PDO::FETCH_ASSOC))
-								 {
-									 echo '<tr>';
+		while ($row = $listquery->fetch(PDO::FETCH_ASSOC))
+		 {
+		  echo '<tr>';
 
-                   echo '<td>';
-									 echo $row['date'];
+                  echo '<td>';
+		  echo $row['date'];
 
-									 echo '</td>';
+		  echo '</td>';
 
-									 echo '<td>';
+		  echo '<td>';
 
-									 echo $row['time'];
+		  echo $row['time'];
 
-									 echo '</td>';
+		  echo '</td>';
 
-									 echo '<td>';
+		  echo '<td>';
 
-									 echo $row['room_no'];
+		  echo $row['room_no'];
 
-									 echo '</td>';
+	          echo '</td>';
 
-									 echo '<td>';
+		  echo '<td>';
 
-									 echo $row['description'];
+		  echo $row['description'];
 
-									 echo '</td>';
-                   echo '<td>';
-                    echo '<div class="w3-container" id="'; echo $row['meeting_id']; echo '"><p><button onclick="edit_click(this)" class="w3-btn">edit</button></p></div>';
+		  echo '</td>';
+                  echo '<td>';
+                  echo '<div class="w3-container" id="'; echo $row['meeting_id']; echo '"><p><button onclick="edit_click(this)" class="w3-btn">edit</button></p></div>';
 
-                    echo '</td><td>';
-                    echo '<div class="w3-container"><p><button onclick="delete_click(this)" id="'; echo $row['meeting_id']; echo'" class="w3-btn">remove</button></p></div>';
+                  echo '</td><td>';
+                  echo '<div class="w3-container"><p><button onclick="delete_click(this)" id="'; echo $row['meeting_id']; echo'" class="w3-btn">remove</button></p></div>';
+                  echo '</td></tr>';
 
-									 echo '</td></tr>';
+		  }
+                echo '</table>';
+                echo '</div>';
 
-								 }
-                       echo '</table>';
-                       echo '</div>';
-
-
+        # This one below is not PDO....I'll change it soon
           if(isset($_GET['edit_id']) && is_numeric($_GET['edit_id']))
            {
             $edit_id = trim($_GET['edit_id']);
@@ -194,11 +189,11 @@
            } else{
 
 
-				echo '
+	      echo '
 
 
 
-					<div id="container2">
+	  <div id="container2">
             <form action="add-info.php" method="post">
               Event Date:<br>
               <input type="date" name="eventdate" >
