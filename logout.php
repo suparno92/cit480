@@ -6,7 +6,7 @@
 
        session_unset();
        session_destroy();
-       mysqli_close($conn);
+       $conn = null;
 
        echo 'Logout successfull! page is redirecting, please wait...';
        header('Refresh: 1; URL = index.php');
