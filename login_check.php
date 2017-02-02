@@ -2,26 +2,31 @@
 
   include('mysql_connection.php');
 
-    // trims any blank spaces and get the username and password
-   $username = trim($_POST['username']);
+  #remove unwanted characters to prevent hacking
+   $username = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['username']);
    $password = trim($_POST['password']);
 
-  // Checks if the form value is null or empty
+   #Checks if the form value is null or empty
     if($username == '' || $password == ''){
 
-      mysqli_close($conn);
+      $conn = null;
       die("Error. One of the field is empty.");
 
     } else{
 
-    $query = "SELECT pass,club_id FROM user WHERE name='$username'";
-    $response = mysqli_query($conn,$query);
+
+      $query = $conn->prepare('SELECT pass,club_id FROM user WHERE name = :value');
+      $query->bindParam(':value', $username, PDO::PARAM_STR);
+      $query->execute();
+      $query->setFetchMode(PDO::FETCH_ASSOC);
+
+    //$query = "SELECT pass,club_id FROM user WHERE name='$username'";
+    //$response = mysqli_query($conn,$query);
 
 
     //check if username exists.
-    if(mysqli_num_rows($response) == 1){
-
-      $row = mysqli_fetch_assoc($response);
+    if($query->rowCount() == 1){
+      $row = $query->fetch(PDO::FETCH_ASSOC);
 
       $getpass= $row['pass'];
       $getclubid = $row['club_id'];
